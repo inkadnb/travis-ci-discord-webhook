@@ -73,7 +73,7 @@ WEBHOOK_DATA='{
       },
       {
         "name": "Architecture",
-        "value" "'"$CI_RUNNER_EXECUTABLE_ARCH"'",
+        "value": "'"$CI_RUNNER_EXECUTABLE_ARCH"'",
         "inline": true
       }
     ],
