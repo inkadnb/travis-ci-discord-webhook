@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$2" ]; then
-  echo -e "WARNING!!\nYou need to pass the WEBHOOK_URL environment variable as the second argument to this script.\nFor details & guide, visit: https://github.com/DiscordHooks/travis-ci-discord-webhook" && exit
+  echo -e "WARNING!!\nYou need to pass the WEBHOOK_URL environment variable as the second argument to this script.\n" && exit
 fi
 
 echo -e "[Webhook]: Sending webhook to Discord...\\n";
@@ -10,26 +10,27 @@ case $1 in
   "success" )
     EMBED_COLOR=3066993
     STATUS_MESSAGE="Passed"
-    AVATAR="https://travis-ci.org/images/logos/TravisCI-Mascot-blue.png"
+    AVATAR="https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png"
     ;;
 
   "failure" )
     EMBED_COLOR=15158332
     STATUS_MESSAGE="Failed"
-    AVATAR="https://travis-ci.org/images/logos/TravisCI-Mascot-red.png"
+    AVATAR="https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png"
     ;;
 
   * )
     EMBED_COLOR=0
     STATUS_MESSAGE="Status Unknown"
-    AVATAR="https://travis-ci.org/images/logos/TravisCI-Mascot-1.png"
+    AVATAR="https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png"
     ;;
 esac
 
-AUTHOR_NAME="$(git log -1 "$TRAVIS_COMMIT" --pretty="%aN")"
-COMMITTER_NAME="$(git log -1 "$TRAVIS_COMMIT" --pretty="%cN")"
-COMMIT_SUBJECT="$(git log -1 "$TRAVIS_COMMIT" --pretty="%s")"
-COMMIT_MESSAGE="$(git log -1 "$TRAVIS_COMMIT" --pretty="%b")"
+AUTHOR_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%aN")"
+COMMITTER_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%cN")"
+COMMIT_SUBJECT="$(git log -1 "$CI_COMMIT_SHA" --pretty="%s")"
+COMMIT_MESSAGE="$(git log -1 "$CI_COMMIT_SHA" --pretty="%b")"
+COMMIT_BRANCH="$(git branch)"
 
 if [ "$AUTHOR_NAME" == "$COMMITTER_NAME" ]; then
   CREDITS="$AUTHOR_NAME authored & committed"
@@ -37,8 +38,8 @@ else
   CREDITS="$AUTHOR_NAME authored & $COMMITTER_NAME committed"
 fi
 
-if [[ $TRAVIS_PULL_REQUEST != false ]]; then
-  URL="https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST"
+if [[ $CI_MERGE_REQUEST_ID != false ]]; then
+  URL="$CI_MERGE_REQUEST_PROJECT_URL"
 else
   URL=""
 fi
@@ -46,12 +47,12 @@ fi
 TIMESTAMP=$(date --utc +%FT%TZ)
 WEBHOOK_DATA='{
   "username": "",
-  "avatar_url": "https://travis-ci.org/images/logos/TravisCI-Mascot-1.png",
+  "avatar_url": "https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png",
   "embeds": [ {
     "color": '$EMBED_COLOR',
     "author": {
-      "name": "Job '"$TRAVIS_JOB_NAME"' (Build #'"$TRAVIS_BUILD_NUMBER"') '"$STATUS_MESSAGE"' - '"$TRAVIS_REPO_SLUG"'",
-      "url": "'"$TRAVIS_BUILD_WEB_URL"'",
+      "name": "Job '"$CI_JOB_NAME"' (Build #'"$CI_PIPELINE_IID"') '"$STATUS_MESSAGE"' - '"$CI_PROJECT_PATH"'",
+      "url": "'"$CI_JOB_URL"'",
       "icon_url": "'$AVATAR'"
     },
     "title": "'"$COMMIT_SUBJECT"'",
@@ -60,12 +61,12 @@ WEBHOOK_DATA='{
     "fields": [
       {
         "name": "Commit",
-        "value": "'"[\`${TRAVIS_COMMIT:0:7}\`](https://github.com/$TRAVIS_REPO_SLUG/commit/$TRAVIS_COMMIT)"'",
+        "value": "'"[\`${CI_COMMIT_SHA:0:7}\`]($CI_REPOSITORY_URL/commit/$CI_COMMIT_SHA)"'",
         "inline": true
       },
       {
         "name": "Branch",
-        "value": "'"[\`$TRAVIS_BRANCH\`](https://github.com/$TRAVIS_REPO_SLUG/tree/$TRAVIS_BRANCH)"'",
+        "value": "'"[\`$COMMIT_BRANCH\`]($CI_REPOSITORY_URL/commits/$COMMIT_BRANCH)"'",
         "inline": true
       }
     ],
@@ -73,5 +74,5 @@ WEBHOOK_DATA='{
   } ]
 }'
 
-(curl --fail --progress-bar -A "TravisCI-Webhook" -H Content-Type:application/json -H X-Author:k3rn31p4nic#8383 -d "$WEBHOOK_DATA" "$2" \
+(curl --fail --progress-bar -A "GitLabCI-Webhook" -H Content-Type:application/json -H X-Author:n3bs#8383 -d "$WEBHOOK_DATA" "$2" \
   && echo -e "\\n[Webhook]: Successfully sent the webhook.") || echo -e "\\n[Webhook]: Unable to send webhook."
