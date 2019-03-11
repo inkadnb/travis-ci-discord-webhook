@@ -30,7 +30,7 @@ AUTHOR_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%aN")"
 COMMITTER_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%cN")"
 COMMIT_SUBJECT="$(git log -1 "$CI_COMMIT_SHA" --pretty="%s")"
 COMMIT_MESSAGE="$(git log -1 "$CI_COMMIT_SHA" --pretty="%b")"
-COMMIT_BRANCH="$(git branch)"
+#COMMIT_BRANCH="$(git branch)"
 
 if [ "$AUTHOR_NAME" == "$COMMITTER_NAME" ]; then
   CREDITS="$AUTHOR_NAME authored & committed"
@@ -61,12 +61,7 @@ WEBHOOK_DATA='{
     "fields": [
       {
         "name": "Commit",
-        "value": "'"[\`${CI_COMMIT_SHA:0:7}\`]($CI_REPOSITORY_URL/commit/$CI_COMMIT_SHA)"'",
-        "inline": true
-      },
-      {
-        "name": "Branch",
-        "value": "'"[\`$COMMIT_BRANCH\`]($CI_REPOSITORY_URL/commits/$COMMIT_BRANCH)"'",
+        "value": "'"[\`${CI_COMMIT_SHA:0:7}\`]($CI_PROJECT_URL/commit/$CI_COMMIT_SHA)"'",
         "inline": true
       }
     ],
