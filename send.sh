@@ -49,7 +49,7 @@ WEBHOOK_DATA='{
     "color": '$EMBED_COLOR',
     "author": {
       "name": "Job '"$JOB_NAME"' (Build #'"$CI_PIPELINE_IID"') - '"$CI_PROJECT_PATH"'",
-      "url": "'"$CI_JOB_URL"'",
+      "url": "'"$CI_PIPELINE_URL"'",
       "icon_url": "'$AVATAR'"
     },
     "title": "'"$COMMIT_SUBJECT"'",
