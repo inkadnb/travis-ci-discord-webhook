@@ -15,10 +15,10 @@ looking. You've came to the right place.
 1.  Copy the **Webhook URL**.
 
 1.  Go to your repository settings (for which you want status notifications)
-    in GitLab CI and add an environment variable called `WEBHOOK_URL` and paste
+    in GitLab CI and the environment variables `GITLAB_URL` and `WEBHOOK_URL`. For `WEBHOOK_URL` paste
     the **Webhook URL** you got in the previous step.
 
-    ![Add environment variable in Travis CI](https://i.imgur.com/UfXIoZn.png)
+    ![Add environment variable in GitLab CI](https://i.imgur.com/ZrtYe7A.png)
 
 1.  Add jobs with when conditionals similar to below to the `.gitlab-ci.yml` file of your repository.
 
