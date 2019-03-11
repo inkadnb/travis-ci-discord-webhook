@@ -9,19 +9,16 @@ echo -e "[Webhook]: Sending webhook to Discord...\\n";
 case $1 in
   "success" )
     EMBED_COLOR=3066993
-    STATUS_MESSAGE="Passed"
     AVATAR="https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png"
     ;;
 
   "failure" )
     EMBED_COLOR=15158332
-    STATUS_MESSAGE="Failed"
     AVATAR="https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png"
     ;;
 
   * )
     EMBED_COLOR=0
-    STATUS_MESSAGE="Status Unknown"
     AVATAR="https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png"
     ;;
 esac
@@ -30,6 +27,7 @@ AUTHOR_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%aN")"
 COMMITTER_NAME="$(git log -1 "$CI_COMMIT_SHA" --pretty="%cN")"
 COMMIT_SUBJECT="$(git log -1 "$CI_COMMIT_SHA" --pretty="%s")"
 COMMIT_MESSAGE="$(git log -1 "$CI_COMMIT_SHA" --pretty="%b")"
+JOB_NAME="$(echo "$CI_JOB_NAME" | tr _ " ")"
 
 if [ "$AUTHOR_NAME" == "$COMMITTER_NAME" ]; then
   CREDITS="$AUTHOR_NAME authored & committed"
@@ -50,7 +48,7 @@ WEBHOOK_DATA='{
   "embeds": [ {
     "color": '$EMBED_COLOR',
     "author": {
-      "name": "Job '"$CI_JOB_NAME"' (Build #'"$CI_PIPELINE_IID"') '"$STATUS_MESSAGE"' - '"$CI_PROJECT_PATH"'",
+      "name": "Job '"$JOB_NAME"' (Build #'"$CI_PIPELINE_IID"') - '"$CI_PROJECT_PATH"'",
       "url": "'"$CI_JOB_URL"'",
       "icon_url": "'$AVATAR'"
     },
