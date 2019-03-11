@@ -48,7 +48,7 @@ WEBHOOK_DATA='{
   "embeds": [ {
     "color": '$EMBED_COLOR',
     "author": {
-      "name": "Job '"$JOB_NAME"' (Build #'"$CI_PIPELINE_IID"') - '"$CI_PROJECT_PATH"'",
+      "name": "Job '"$JOB_NAME"' (Pipeline #'"$CI_PIPELINE_IID"') - '"$CI_PROJECT_PATH"'",
       "url": "'"$CI_PIPELINE_URL"'",
       "icon_url": "'$AVATAR'"
     },
@@ -64,6 +64,16 @@ WEBHOOK_DATA='{
       {
         "name": "Branch",
         "value": "'"[\`$CI_COMMIT_REF_NAME\`]($CI_PROJECT_URL/commits/$CI_COMMIT_REF_NAME)"'",
+        "inline": true
+      },
+      {
+        "name": "Runner",
+        "value": "'"[\`$CI_RUNNER_DESCRIPTION\`]($CI_PROJECT_URL/runners/$CI_RUNNER_ID)"'",
+        "inline": true
+      },
+      {
+        "name": "Architecture",
+        "value" "'"$CI_RUNNER_EXECUTABLE_ARCH"'",
         "inline": true
       }
     ],
