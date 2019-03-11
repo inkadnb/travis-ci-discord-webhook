@@ -74,5 +74,5 @@ WEBHOOK_DATA='{
   } ]
 }'
 
-(curl --fail --progress-bar -A "GitLabCI-Webhook" -H Content-Type:application/json -H X-Author:n3bs#8383 -d "$WEBHOOK_DATA" "$2" \
+(curl --fail --progress-bar -iv --raw -A "GitLabCI-Webhook" -H Content-Type:application/json -H X-Author:n3bs#8383 -d "$WEBHOOK_DATA" "$2" \
   && echo -e "\\n[Webhook]: Successfully sent the webhook.") || echo -e "\\n[Webhook]: Unable to send webhook."
