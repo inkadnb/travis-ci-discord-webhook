@@ -30,9 +30,9 @@ COMMIT_MESSAGE="$(git log -1 "$CI_COMMIT_SHA" --pretty="%b")"
 JOB_NAME="$(echo "$CI_JOB_NAME" | tr _ " ")"
 
 if [ "$AUTHOR_NAME" == "$COMMITTER_NAME" ]; then
-  CREDITS="$AUTHOR_NAME authored & committed"
+  CREDITS="[\`$AUTHOR_NAME\`]($CI_PAGES_URL/$GITLAB_USER_NAME) authored & committed"
 else
-  CREDITS="$AUTHOR_NAME authored & $COMMITTER_NAME committed"
+  CREDITS="$AUTHOR_NAME authored & [\`$COMMITTER_NAME\`]($CI_PAGES_URL/$GITLAB_USER_NAME) committed"
 fi
 
 if [[ $CI_MERGE_REQUEST_ID != false ]]; then
